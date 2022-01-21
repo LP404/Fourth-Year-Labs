@@ -4,16 +4,30 @@ import random as rnd
 import scipy as sp
 import time as t
 
-SeedInt = int(t.time())
-
-nprnd.seed(SeedInt)
-rnd.seed(SeedInt)
 
 
-def Walter(TotalNum):
+def main():
     
-    RandInt = 1
+    TotalNum = int(input("How many random numbers would you like to generate? : "))
+    
+    SeedInt = int(t.time())
+
+    nprnd.seed(SeedInt)
+    rnd.seed(SeedInt)
+
+    NumpyRand = nprnd.rand(TotalNum)
+    
+    PyRand = np.zeros(TotalNum)
+    
+    for i in range(0,TotalNum):
+        
+        PyRand[i] = rnd.random()
     
     
     
-    return RandInt
+    return
+
+
+
+
+main()
