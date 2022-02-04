@@ -70,10 +70,31 @@ Xaxis4 = Xaxis2 - Xaxis2[int((len(Xaxis2)-1)/2)]
 
 
 
+TotalEvents = int(input("How many events will the particles in the box experiance? : ")) 
+Timeaxis = np.arange(0,TotalEvents + 1,1)
+PCRandParticleLocY = np.zeros((len(PCRand),len(Timeaxis)))
+SFRandParticleLocY = np.zeros((len(SFRand),len(Timeaxis)))
+for i in range(0,len(PCRand)):
+    PCRandParticleLocY[i][0] = PCRand
+    SFRandParticleLocY[i][0] = (SFRand + 1)
 
 
-# TotalParticles = int(input("How many particles are in the box? : "))
-# ParticleLocX = nprnd.rand(TotalParticles)
-# ParticleLocX-=1 
-# ParticleLocY = nprnd.rand(TotalParticles)
+for i in range(0,len(Timeaxis)):
+    
+    #Picks a random particle from each partition
+    Particle1 = PCRandParticleLocY[PCG64.integers(0,TotalNum,1)[0]]
+    Particle2 = SFRandParticleLocY[SFC64.integers(0,TotalNum,1)[0]]
+    
+    #Picks a random particle in each partition and moves it to the oppostie parition
+    if Particle1 <= 1:
+        Particle1 +=1
+    else:
+        Particle1 -= 1
+    
+    if Particle2 >= 1:
+        Particle2 -=1
+    else:
+        Particle2 += 1
 
+plt.scatter(Timeaxis,Particle1)
+plt.scatter(Timeaxis,Particle2)
