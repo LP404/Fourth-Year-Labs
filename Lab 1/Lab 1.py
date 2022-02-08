@@ -7,20 +7,14 @@ import time as t
 #Check time simulation
 
 
-def shiftFunc(array,shiftVal):
-    
-    if shiftVal > len(array):
-        print('Length of shift cannot exceed length of array')
-        return
-    
+def shiftFunc(Array,Shift):
+    if Shift > len(Array):
+        print('Array Shift exceeds length of array. Function will return input Array')
+        return Array
     else:
-        
-        array1 = array[int(shiftVal-1):]
-        shiftedArray = shift(array,shiftVal,cval=0)
-        for i in range(0,len(array1)):
-            shiftedArray[i] = array1[i]
-            
-        return shiftedArray
+        ArrayFront, ArrayBack = Array[0:int(Shift)],Array[int(Shift):len(Array)]
+        ShiftedArray = np.concatenate([ArrayBack,ArrayFront])
+    return ShiftedArray
 
 def chiSQ(inputArray,binNo):
     Observed = np.zeros(binNo)
