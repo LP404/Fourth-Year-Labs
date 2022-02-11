@@ -76,24 +76,18 @@ SRRandChiSQ = chiSQ(SFRand,SFRandBins)
 #Correlations
 
 
-Cor1 = np.correlate(PCRand,PCRand,mode = 'same')
-Cor2 = np.correlate(SFRand,SFRand,mode = 'same')
+PCRandAutoCorrelate = np.correlate((PCRand-np.mean(PCRand)) / (np.std(PCRand) * len(PCRand)),(PCRand-np.mean(PCRand)) / (np.std(PCRand)),mode = 'full')
+SFRandAutoCorrelate = np.correlate((SFRand-np.mean(SFRand)) / (np.std(SFRand) * len(SFRand)),(SFRand-np.mean(SFRand)) / (np.std(SFRand)),mode = 'full')   
 
 
-Cor3 = np.correlate(PCRand,PCRand,mode = 'full')
-Cor4 = np.correlate(SFRand,SFRand,mode = 'full')   
+Xaxis = np.arange(1,len(PCRandAutoCorrelate) + 1,1)
+ShiftedXaxis = Xaxis - Xaxis[int((len(Xaxis)-1)/2)]
 
-Xaxis = np.arange(1,TotalNum + 1,1)
-Xaxis3 = Xaxis - Xaxis[int((len(Xaxis)-1)/2)]
-
-Xaxis2 = np.arange(1,len(Cor3) + 1,1)
-Xaxis4 = Xaxis2 - Xaxis2[int((len(Xaxis2)-1)/2)]
-
-PCRandCorreletedValues = SFRandCorreletedValues = np.zeros(TotalNum)
+PCRandLooperCorrelate = SFRandLooperCorrelate = np.zeros(TotalNum)
 
 for i in range(0,TotalNum):
-    PCRandCorreletedValues[i] = np.correlate(PCRand,shiftFunc(PCRand,i),mode='valid')
-    SFRandCorreletedValues[i] = np.correlate(SFRand,shiftFunc(SFRand,i),mode='valid')
+    PCRandLooperCorrelate[i] = np.correlate(PCRand,shiftFunc(PCRand,i),mode='valid')
+    SFRandLooperCorrelate[i] = np.correlate(SFRand,shiftFunc(SFRand,i),mode='valid')
 
 
 
