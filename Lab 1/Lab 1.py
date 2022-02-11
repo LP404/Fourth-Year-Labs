@@ -34,20 +34,47 @@ def chiSQ(inputArray,binNo):
     
     return ChiSq
 
-#Probability of exceeding chi squadred with 9 degrees of freedom and alpha = 0.05 is 16.92
-
 TotalNum = int(input("How many random numbers would you like to generate? : "))
 
 #RandomSeed = t.time()
 #Set Seed = 1337
 
-Seed = int(1337)
+Seed = int(t.time())
 
 PCG64 = np.random.Generator(np.random.PCG64(seed=np.random.SeedSequence(Seed)))
 SFC64 = np.random.Generator(np.random.SFC64(seed=np.random.SeedSequence(Seed)))
 
 PCRand = PCG64.random(TotalNum)
 SFRand = SFC64.random(TotalNum)
+
+#ChiSQ Test
+
+#Probability of exceeding chi squadred with 9 degrees of freedom and alpha = 0.05 is 16.92
+#Probability of exceeding chi squadred with 9 degrees of freedom and alpha = 0.05 is 16.92
+
+
+PCRand25, PCRand75 = np.percentile(PCRand, [25, 75])
+SFRand25, SFRand75 = np.percentile(SFRand, [25, 75])
+
+PCRandBinWidth = 2 * (PCRand75 - PCRand25) * len(PCRand) ** (-1/3)
+SFRandBinWidth = 2 * (SFRand75 - SFRand25) * len(SFRand) ** (-1/3)
+
+PCRandBins = round((PCRand.max() - PCRand.min()) / PCRandBinWidth)
+SFRandBins = round((SFRand.max() - SFRand.min()) / SFRandBinWidth)
+
+
+plt.hist(PCRand, bins=PCRandBins)
+plt.hist(SFRand, bins=SFRandBins)
+
+
+PCRandChiSQ = chiSQ(PCRand,PCRandBins)
+SRRandChiSQ = chiSQ(SFRand,SFRandBins)
+
+
+
+
+#Correlations
+
 
 Cor1 = np.correlate(PCRand,PCRand,mode = 'same')
 Cor2 = np.correlate(SFRand,SFRand,mode = 'same')
@@ -62,33 +89,85 @@ Xaxis3 = Xaxis - Xaxis[int((len(Xaxis)-1)/2)]
 Xaxis2 = np.arange(1,len(Cor3) + 1,1)
 Xaxis4 = Xaxis2 - Xaxis2[int((len(Xaxis2)-1)/2)]
 
+PCRandCorreletedValues = SFRandCorreletedValues = np.zeros(TotalNum)
+
+for i in range(0,TotalNum):
+    PCRandCorreletedValues[i] = np.correlate(PCRand,shiftFunc(PCRand,i),mode='valid')
+    SFRandCorreletedValues[i] = np.correlate(SFRand,shiftFunc(SFRand,i),mode='valid')
 
 
+
+
+
+
+
+#Tasks 2-4
+TotalParticles = int(input("How many particles are in the box? : ")) 
 TotalEvents = int(input("How many events will the particles in the box experiance? : ")) 
+
 Timeaxis = np.arange(0,TotalEvents + 1,1)
-PCRandParticleLocY = np.zeros((len(PCRand),len(Timeaxis)))
-SFRandParticleLocY = np.zeros((len(SFRand),len(Timeaxis)))
-for i in range(0,len(PCRand)):
-    PCRandParticleLocY[i][0] = PCRand
-    SFRandParticleLocY[i][0] = (SFRand + 1)
+
+PCRandBox = PCG64.random(TotalParticles)
+SFRandBox = SFC64.random(TotalParticles)
+
+PCRandParticleLocY = PCRandParticleLocYBox2 = np.zeros((len(PCRandBox),len(Timeaxis)))
+SFRandParticleLocY = SFRandParticleLocYBox2 = np.zeros((len(SFRandBox),len(Timeaxis)))
+
+for i in range(0,len(PCRandBox)):
+    PCRandParticleLocY[i][0] =  PCRandParticleLocYBox2[i][0] = PCRandBox[i]
+    SFRandParticleLocY[i][0] = SFRandParticleLocYBox2[i][0] = (SFRandBox[i] + 1)
+    
 
 
-for i in range(0,len(Timeaxis)):
+for i in range(0,len(Timeaxis)-1):
     
     #Picks a random particle from each partition
-    Particle1 = PCRandParticleLocY[PCG64.integers(0,TotalNum,1)[0]]
-    Particle2 = SFRandParticleLocY[SFC64.integers(0,TotalNum,1)[0]]
+    Index1 = PCG64.integers(0,TotalParticles,1)[0]
+    Index2 = SFC64.integers(0,TotalParticles,1)[0]
+    
+    Index3 = PCG64.integers(0,TotalParticles,1)[0]
+    Index4 = SFC64.integers(0,TotalParticles,1)[0]
+    
+    Particle1 = PCRandParticleLocY[Index1][i]
+    Particle2 = SFRandParticleLocY[Index2][i]
+    
+    Particle3 = PCRandParticleLocY[Index1][i]
+    Particle4 = SFRandParticleLocY[Index2][i]
     
     #Picks a random particle in each partition and moves it to the oppostie parition
     if Particle1 <= 1:
-        Particle1 +=1
+        Particle1 = Particle1 + 1
     else:
-        Particle1 -= 1
+        Particle1 = Particle1 - 1
     
     if Particle2 >= 1:
-        Particle2 -=1
+        Particle2 = Particle2 - 1
     else:
-        Particle2 += 1
-
-plt.scatter(Timeaxis,Particle1)
-plt.scatter(Timeaxis,Particle2)
+        Particle2 = Particle2 + 1
+     
+    
+    if Particle3 <= 1:
+        if PCG64.integers(0,4,1)[0] < 3:
+            Particle3 = Particle3 + 1
+    else:
+        if PCG64.integers(0,4,1)[0] < 1:    
+            Particle3 = Particle3 - 1
+        
+    if Particle4 >= 1:
+        if SFC64.integers(0,4,1)[0] < 3:
+            Particle4 = Particle4 - 1
+    else:
+        if SFC64.integers(0,4,1)[0] < 1:
+            Particle4 = Particle4 + 1
+        
+    PCRandParticleLocY[:,i+1:i+2] = PCRandParticleLocY[:,i:i+1]
+    SFRandParticleLocY[:,i+1:i+2] = SFRandParticleLocY[:,i:i+1]
+    
+    PCRandParticleLocYBox2[:,i+1:i+2] = PCRandParticleLocYBox2[:,i:i+1]
+    SFRandParticleLocYBox2[:,i+1:i+2] = SFRandParticleLocYBox2[:,i:i+1]
+    
+    PCRandParticleLocY[Index1][i] = Particle1
+    SFRandParticleLocY[Index2][i] = Particle2
+    
+    PCRandParticleLocYBox2[Index3][i] = Particle3
+    SFRandParticleLocYBox2[Index4][i] = Particle4
