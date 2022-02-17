@@ -15,29 +15,13 @@ def shiftFunc(Array,Shift):
     return ShiftedArray
 
 
-#Funcrion that performs a chi squared test using the chi squared formula
-def chiSQ(inputArray,binNo):
-    #Creates an empty array that corresponds to number of bins that were used in the histogram 
-    Observed = np.zeros(binNo)
+#Function that performs a chi squared test using the chi squared formula
+def chiSQ(Observed,binNo):
+    #Observed corresponds to the number of counts in a given bin, this has already been calcauted by plt.hist
+    
     #This is the expected number of counts of values that fall within a given bin
-    Expected = len(inputArray) / binNo
-    #This sets the bin boundaries for the variables to fall into
-    BinBoundary = np.arange(0,1+(1/binNo),(1/binNo))
-    
-    #Loop that counts the occurences of values falling within their respective bins
-    for i in range(0,len(Observed)):
-        for k in range(0,len(inputArray)):
-            
-            #If statement will check if a values falles within a given bin if the condition is met, the occurance is added to the total count
-            if inputArray[k] >= BinBoundary[i] and inputArray[k] < BinBoundary[i+1] :
-                Observed[i] += 1
-            #The above if statement will not count any instance of the inputArray when it is one, this next line fixes this
-            elif  inputArray[k] == 1:
-                Observed[i] += 1   
-            else:
-               #pass is a null operation, Python kept returning an error with this if statement and pass was the necessary fix
-               pass
-    
+    Expected = len(Observed) / binNo
+
     #Peforms the final summation to attain the chi sqaured value
     ChiSq = np.sum((Observed - Expected)**2 / Expected)
     
