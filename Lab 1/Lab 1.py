@@ -1,66 +1,84 @@
 import numpy as np
-from numpy import random as nprnd
-import random as rnd
 import matplotlib.pyplot as plt
-from scipy.ndimage.interpolation import shift
 import time as t
-#Check time simulation
 
-
+#Basic function that shifts all the values in an array x number of indices 'to the right'.
 def shiftFunc(Array,Shift):
+    # A quick check to see if the desired shift length exceeds the length of the array
     if Shift > len(Array):
         print('Array Shift exceeds length of array. Function will return input Array')
         return Array
     else:
+        #Seperates the Array into two parts at the point where it is to be shifted the second part is then moved to be infront and the arrays are concatenated together to make a shifted array
         ArrayFront, ArrayBack = Array[0:int(Shift)],Array[int(Shift):len(Array)]
         ShiftedArray = np.concatenate([ArrayBack,ArrayFront])
     return ShiftedArray
 
+
+#Funcrion that performs a chi squared test using the chi squared formula
 def chiSQ(inputArray,binNo):
+    #Creates an empty array that corresponds to number of bins that were used in the histogram 
     Observed = np.zeros(binNo)
+    #This is the expected number of counts of values that fall within a given bin
     Expected = len(inputArray) / binNo
+    #This sets the bin boundaries for the variables to fall into
     BinBoundary = np.arange(0,1+(1/binNo),(1/binNo))
+    
+    #Loop that counts the occurences of values falling within their respective bins
     for i in range(0,len(Observed)):
         for k in range(0,len(inputArray)):
-            if inputArray[k] >= BinBoundary[i] and BinBoundary[i+1] > inputArray[k] :
+            
+            #If statement will check if a values falles within a given bin if the condition is met, the occurance is added to the total count
+            if inputArray[k] >= BinBoundary[i] and inputArray[k] < BinBoundary[i+1] :
                 Observed[i] += 1
-            #The above if statement will not count any instance of the inputArray when it is one, this next line fizes that
+            #The above if statement will not count any instance of the inputArray when it is one, this next line fixes this
             elif  inputArray[k] == 1:
                 Observed[i] += 1   
             else:
-               #pass is a null operation the IDE kept throwing me an error about the next line and Pass seemed to placate it
+               #pass is a null operation, Python kept returning an error with this if statement and pass was the necessary fix
                pass
+    
+    #Peforms the final summation to attain the chi sqaured value
     ChiSq = np.sum((Observed - Expected)**2 / Expected)
     
     return ChiSq
 
+
+#A function that performs calculations relevant to the Freedman–Diaconis rule, which is used to find the number of bins in a histogram should use for a given dataset
+
+def FDBinFinder(RandArray):
+    
+    #Gets the lower and upper quartiles for the input array
+    RandArray25, RandArray75 = np.percentile(RandArray, [25, 75])
+    
+    #The calcualtion that is the Freedman–Diaconis rule is performed
+    BinWidth = 2 * (RandArray75 - RandArray25) * len(RandArray) ** (-1/3)
+    
+    #Calcualtes number of bins from bin width
+    BinNum = round((RandArray.max() - RandArray.min()) / BinWidth)
+    
+    return BinNum
+
+
+#Script prompts user input, it could be a decalred variable but I like the interactivity
 TotalNum = int(input("How many random numbers would you like to generate? : "))
 
-#RandomSeed = t.time()
-#Set Seed = 1337
+
+#Seed is set using the t.time() function, returns the current time in Unix time, which is seconds since 01/01/1970 00:00 (UTC)
+#Seed could also be set with a integer value
 
 Seed = int(t.time())
+#Seed = 1337
 
+#The Bit Generators PCG64 and SFC64 were chosen for this script
 PCG64 = np.random.Generator(np.random.PCG64(seed=np.random.SeedSequence(Seed)))
 SFC64 = np.random.Generator(np.random.SFC64(seed=np.random.SeedSequence(Seed)))
 
+#Generates an array of n lengths filled with random numbers from 0 to 1
 PCRand = PCG64.random(TotalNum)
 SFRand = SFC64.random(TotalNum)
 
 #ChiSQ Test
-
-#Probability of exceeding chi squadred with 9 degrees of freedom and alpha = 0.05 is 16.92
-#Probability of exceeding chi squadred with 9 degrees of freedom and alpha = 0.05 is 16.92
-
-
-PCRand25, PCRand75 = np.percentile(PCRand, [25, 75])
-SFRand25, SFRand75 = np.percentile(SFRand, [25, 75])
-
-PCRandBinWidth = 2 * (PCRand75 - PCRand25) * len(PCRand) ** (-1/3)
-SFRandBinWidth = 2 * (SFRand75 - SFRand25) * len(SFRand) ** (-1/3)
-
-PCRandBins = round((PCRand.max() - PCRand.min()) / PCRandBinWidth)
-SFRandBins = round((SFRand.max() - SFRand.min()) / SFRandBinWidth)
 
 
 plt.hist(PCRand, bins=PCRandBins)
