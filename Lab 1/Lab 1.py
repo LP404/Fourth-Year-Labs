@@ -46,9 +46,14 @@ def FDBinFinder(RandArray):
 
 
 #All input variables for all tasks are declared here
+#Number of samples for task 1
 TotalNum = 20000
+#Number of particles and events for tasks 2-4
 TotalParticles = 1000
 TotalEvents = 10000
+
+#Shift value for lag plot, task 1
+ShiftVal = 2000
 
 #Seed is set using the t.time() function, returns the current time in Unix time, which is seconds since 01/01/1970 00:00 (UTC)
 #Seed could also be set with a integer value
@@ -173,7 +178,6 @@ plt.xlabel('x-shift')
 plt.ylabel('Correlation')
 
 
-ShiftVal = 20
 plt.figure(5)
 plt.title(f'BitGenrator PCG64 Lag plot with {TotalNum} samples \n Seed = {Seed}')
 plt.xlabel('Random Values')
@@ -181,7 +185,7 @@ plt.ylabel(f'Random values shifted by + {ShiftVal}')
 plt.scatter(PCRand,shiftFunc(PCRand,ShiftVal), s = 1)
 
 plt.figure(6)
-plt.title(f'BitGenrator SFC64 Uniform Distributions with {TotalNum} samples \n Seed = {Seed}')
+plt.title(f'BitGenrator SCF64 Lag plot with {TotalNum} samples \n Seed = {Seed}')
 plt.xlabel('Random Values')
 plt.ylabel(f'Random values shifted by + {ShiftVal}')
 plt.scatter(SFRand,shiftFunc(SFRand,ShiftVal), s = 1)
@@ -329,10 +333,10 @@ PCRandBox1Count75 = np.zeros(len(Timeaxis))
 SFRandBox1Count75 = np.zeros(len(Timeaxis)) 
 
 for i in range(0,len(Timeaxis)):
-   PCRandBox1Count[i] = len(np.where(PCRandParticleLocY[:,i] < 1)[0])
-   SFRandBox1Count[i] = len(np.where(SFRandParticleLocY[:,i] > 1)[0])
-   PCRandBox1Count75[i] = len(np.where(PCRandParticleLocYBox2[:,i] < 1)[0])
-   SFRandBox1Count75[i] = len(np.where(SFRandParticleLocYBox2[:,i] > 1)[0])
+    PCRandBox1Count[i] = len(np.where(PCRandParticleLocY[:,i] < 1)[0])
+    SFRandBox1Count[i] = len(np.where(SFRandParticleLocY[:,i] > 1)[0])
+    PCRandBox1Count75[i] = len(np.where(PCRandParticleLocYBox2[:,i] < 1)[0])
+    SFRandBox1Count75[i] = len(np.where(SFRandParticleLocYBox2[:,i] > 1)[0])
    
 
 #The data is plotted
