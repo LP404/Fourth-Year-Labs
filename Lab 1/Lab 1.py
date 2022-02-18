@@ -47,10 +47,10 @@ def FDBinFinder(RandArray):
 
 #All input variables for all tasks are declared here
 #Number of samples for task 1
-TotalNum = 20000
+TotalNum = 5000
 #Number of particles and events for tasks 2-4
-TotalParticles = 1000
-TotalEvents = 10000
+TotalParticles = 500
+TotalEvents = 1000
 
 #Shift value for lag plot, task 1
 ShiftVal = 2000
@@ -99,9 +99,11 @@ print(f'Chi-Squared for SFC64 for {TotalNum} samples with {SFRandBinNum - 1} deg
 #Correlations
 #Numpy AutoCorrelate
 
+#Autocorrelation
 PCRandAutoCorrelate = np.correlate(PCRand,PCRand, mode = 'full')
 SFRandAutoCorrelate = np.correlate(SFRand,SFRand, mode = 'full')
 
+#Normalised Autocorrelation
 PCRandAutoCorrelateNorm = np.correlate((PCRand-np.mean(PCRand)) / (np.std(PCRand) * len(PCRand)),(PCRand-np.mean(PCRand)) / (np.std(PCRand)),mode = 'full')
 SFRandAutoCorrelateNorm = np.correlate((SFRand-np.mean(SFRand)) / (np.std(SFRand) * len(SFRand)),(SFRand-np.mean(SFRand)) / (np.std(SFRand)),mode = 'full')   
 
