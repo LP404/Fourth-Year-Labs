@@ -49,8 +49,8 @@ def FDBinFinder(RandArray):
 #Number of samples for task 1
 TotalNum = 5000
 #Number of particles and events for tasks 2-4
-TotalParticles = 500
-TotalEvents = 1000
+TotalParticles = 1000
+TotalEvents = 10000
 
 #Shift value for lag plot, task 1
 ShiftVal = 2000
@@ -345,19 +345,23 @@ for i in range(0,len(Timeaxis)):
 Figure, ((SubPlot1,SubPlot2),(SubPlot3,SubPlot4)) = plt.subplots(2,2,figsize=(15,10), constrained_layout=False, sharex='col', sharey='row') 
 Figure.suptitle(f"Particles In A Box \n Seed = {Seed}")
 
+SubPlot1.title.set_text('Particles present in their paritions from random selection box (PCG64)')
 SubPlot1.plot(Timeaxis,PCRandBox1Count, label = 'Starting Parition')
-SubPlot1.plot(Timeaxis,(1000 - PCRandBox1Count), label = 'Other Parition')
+SubPlot1.plot(Timeaxis,(TotalParticles - PCRandBox1Count), label = 'Other Parition')
 
+SubPlot2.title.set_text('Particles present in their paritions from random selection box (SCF64)')
 SubPlot2.plot(Timeaxis,SFRandBox1Count, label = 'Starting Parition')
-SubPlot2.plot(Timeaxis,(1000 - SFRandBox1Count), label = 'Other Parition')
+SubPlot2.plot(Timeaxis,(TotalParticles - SFRandBox1Count), label = 'Other Parition')
 
+SubPlot3.title.set_text('Particles present in their paritions from 75/25 bias box (PCG64)')
 SubPlot3.plot(Timeaxis,PCRandBox1Count75, label = 'Starting Parition')
-SubPlot3.plot(Timeaxis,(1000 - PCRandBox1Count75), label = 'Other Parition')
+SubPlot3.plot(Timeaxis,(TotalParticles - PCRandBox1Count75), label = 'Other Parition')
 SubPlot3.hlines(750, 0, TotalEvents, color = 'black', linestyle="dotted")
 SubPlot3.hlines(250, 0, TotalEvents, color = 'red', linestyle="dotted")
 
+SubPlot4.title.set_text('Particles present in their paritions from 75/25 bias box (SCF64)')
 SubPlot4.plot(Timeaxis,SFRandBox1Count75, label = 'Starting Parition')
-SubPlot4.plot(Timeaxis,(1000 - SFRandBox1Count75), label = 'Other Parition')
+SubPlot4.plot(Timeaxis,(TotalParticles - SFRandBox1Count75), label = 'Other Parition')
 SubPlot4.hlines(750, 0, TotalEvents, color = 'black', linestyle="dotted")
 SubPlot4.hlines(250, 0, TotalEvents, color = 'red', linestyle="dotted")
 
