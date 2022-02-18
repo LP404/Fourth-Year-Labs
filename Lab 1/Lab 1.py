@@ -1,4 +1,4 @@
-#Import neccessary libaraies
+#Import necessary libraries
 import numpy as np
 import matplotlib.pyplot as plt
 import time as t
@@ -10,7 +10,7 @@ def shiftFunc(Array,Shift):
         print('Array Shift exceeds length of array. Function will return input Array')
         return Array
     else:
-        #Seperates the Array into two parts at the point where it is to be shifted the second part is then moved to be infront and the arrays are concatenated together to make a shifted array
+        #Seperates the Array into two parts at the point where it is to be shifted the second part is then moved to be in front and the arrays are concatenated together to make a shifted array
         ArrayFront, ArrayBack = Array[0:int(Shift)],Array[int(Shift):len(Array)]
         ShiftedArray = np.concatenate([ArrayBack,ArrayFront])
     return ShiftedArray
@@ -45,7 +45,7 @@ def FDBinFinder(RandArray):
     return BinNum
 
 
-#All input variables for all tasks are delclared here
+#All input variables for all tasks are declared here
 TotalNum = 20000
 TotalParticles = 1000
 TotalEvents = 10000
@@ -204,8 +204,8 @@ PCRandParticleLocYBox2 = np.zeros((len(PCRandBox),len(Timeaxis)))
 SFRandParticleLocY = np.zeros((len(SFRandBox),len(Timeaxis)))
 SFRandParticleLocYBox2 = np.zeros((len(SFRandBox),len(Timeaxis)))
 
-#This populates the previous matricies with the location of the particles
-#The SFC64 random numbers are given a +1 increase to put it starting in another partition this was incase I decided to try out some methods of data plotting. I did not do anything with this but I saw no reason to go back and change to +1 gain
+#This populates the previous matrices with the location of the particles
+#The SFC64 random numbers are given a +1 increase to put it starting in another partition this was in case I decided to try out some methods of data plotting. I did not do anything with this, but I saw no reason to go back and change to +1 gain
 for i in range(0,len(PCRandBox)):
     PCRandParticleLocY[i][0] = PCRandBox[i]
     PCRandParticleLocYBox2[i][0] = PCRandBox[i]
@@ -244,13 +244,13 @@ for i in range(1,len(Timeaxis)):
     else:
         Particle2 = Particle2 + 1
      
-    #Picks a random particle in each partition and prepares it to move it to the oppostie parition
+    #Picks a random particle in each partition and prepares it to move it to the opposite partition
     if Particle3 <= 1:
-        #A second check occus to see if it makes the transition, if it does it will cross the parition
+        #A second check occurs to see if it makes the transition, if it does it will cross the partition
         if PCG64.random(1)[0] < P:
             Particle3 = Particle3 + 1
     else:
-        #A second check occus to see if it makes the transition, if it does it will cross the parition
+        #A second check occurs to see if it makes the transition, if it does it will cross the partition
         if PCG64.random(1)[0] >= P:    
             Particle3 = Particle3 - 1
         
@@ -263,15 +263,15 @@ for i in range(1,len(Timeaxis)):
         if PCG64.random(1)[0] >= P:
             Particle4 = Particle4 + 1
       
-    #I understand this is not the most effiecnet or elegant method to do this, but this is the only one that would work
-    #This updates the next columb in the matrix with the current columb's data
+    #I understand this is not the most efficient or elegant method to do this, but this is the only one that would work
+    #This updates the next column in the matrix with the current column’s data
     for k in range(0,len(PCRandBox)):
         PCRandParticleLocY[k][i] = PCRandParticleLocY[k][i-1]
         SFRandParticleLocY[k][i] =  SFRandParticleLocY[k][i-1]
         PCRandParticleLocYBox2[k][i] = PCRandParticleLocYBox2[k][i-1]
         SFRandParticleLocYBox2[k][i] = SFRandParticleLocYBox2[k][i-1]
     
-    #These input the selected particles new location into the matricies
+    #These input the selected particle’s new location into the matrices
     PCRandParticleLocY[Index1][i] = Particle1
     SFRandParticleLocY[Index2][i] = Particle2
     
@@ -321,7 +321,7 @@ SubPlot4.grid(b=True, which='both', linestyle='-', linewidth='0.5')
 plt.show()
 
 
-#These arrays and following loop will count how many particles are in their repsective starting parition
+#These arrays and following loop will count how many particles are in their respective starting partition
 #Box 1 corresponds to the starting Box
 PCRandBox1Count = np.zeros(len(Timeaxis)) 
 SFRandBox1Count = np.zeros(len(Timeaxis)) 
