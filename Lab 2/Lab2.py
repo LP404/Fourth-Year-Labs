@@ -1,5 +1,6 @@
 import numpy as np
 import scipy as sp
+from inspect import signature
 import quantumrandom as qrand
 
 #Named after driver that won the 1983 Monte-Carlo rally 
@@ -40,5 +41,5 @@ def Lancia037(Samples,Dims):
 
 
 
-
+Dims,Lims = WalterRohl()
 
