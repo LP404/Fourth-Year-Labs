@@ -3,18 +3,20 @@ import scipy as sp
 from inspect import signature
 import quantumrandom as qrand
 
-#Named after driver that won the 1983 Monte-Carlo rally 
-def WalterRohl():
-    while True:
-        try:
-            Dims = int(input('Number of dimensions : '))
-            if Dims > 0:
-                break
-            else:
-                print("Number of dimensions amount can't be less than zero, try again")
-        except ValueError:
-            print("Number of dimensions amount must be a number, try again")
+#Integrand
+def func():
+    return 2
     
+
+#Named after driver that won the 1983 Monte-Carlo rally 
+def WalterRohl(Integrad):
+    Dims = len(signature(func).parameters)
+    
+    #This is for the edge case of an integrand that consists of one or more constants
+    if Dims == 0:
+        Dims = 1
+    else:
+        pass
     Lims = [[] for _ in range(0,Dims)]
     
     for i in range(Dims):
@@ -34,9 +36,9 @@ def WalterRohl():
 
 #Named after the car that won the 1983 Monte-Carlo rally
 def Lancia037(Samples,Dims):
-    
-    
-    
+        
+        
+        
     return
 
 
