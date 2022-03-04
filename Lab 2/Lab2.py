@@ -35,7 +35,7 @@ def WalterRohl(Integrad):
 
 
 #Named after the car that won the 1983 Monte-Carlo rally
-def Lancia037(Samples,Dims):
+def Lancia037(Samples,Dims,Lims):
         
         
         
@@ -43,5 +43,5 @@ def Lancia037(Samples,Dims):
 
 
 
-Dims,Lims = WalterRohl()
+Lancia037(WalterRohl(func()))
 
