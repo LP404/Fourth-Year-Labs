@@ -32,59 +32,57 @@ def nDcube(DataIn):
 NoSamples = 10000
 NoDims = 3
 
-#def Lancia037(NoSamples,Integrand,NoDims):
-DimsCheck = len(signature(Integrand).parameters)
-Dims = NoDims
-
-if DimsCheck > Dims:
-    print('There are dimentions that have no limits assigned to them')
-    #return
-else:
-    pass
-
-Lims = [[] for _ in range(0,Dims)]
-SampleBox = [[] for _ in range(0,Dims)]
-SampleBoxSq = [[] for _ in range(0,Dims)]
-
-for i in range(Dims):
-    while True:   
-        try:
-            lower = float(input('Value of lower limit for dimention '+str(i+1)+' : '))
-            upper = float(input('Value of upper limit for dimention '+str(i+1)+' : '))
-            print('\n')
-            break
-        except ValueError:
-            print("Value is not a real number, try again")
-    Lims[i].insert(0,lower)
-    Lims[i].insert(1,upper)
-
-
-for i in range(Dims):
-    samples = SFC64.uniform(Lims[i][0],Lims[i][1],NoSamples)
-    SampleBox[i] = samples
+def Lancia037(NoSamples,Integrand,NoDims):
     
-
-SampleBoxSq = SqList(SampleBox)
-
-# Ssum = Integrand(SampleBox)
-# SsumSq = Integrand(SampleBoxSq)
-
-# ExpectSsum = sum(Ssum) / NoSamples
-# ExpectSsumSq = sum(SsumSq) / NoSamples
-
-#Var = ((TotalSq) - (Total)**2) / NoSamples
-
-#Std = (Var)**0.5
-
-Coef = np.prod(np.diff(Lims))
-
-Total = np.sum(Integrand(SampleBox))
-
-# error = Coef * (np.std(Ssum) / (NoSamples)**0.5)
-
-#error2 = Coef * Std / (NoSamples)**0.5
+    DimsCheck = len(signature(Integrand).parameters)
+    Dims = NoDims
     
-    #return Lims,SampleBox, (Coef / NoSamples) * Total, error,error2, Coef, Std
+    if DimsCheck > Dims:
+        print('There are dimentions that have no limits assigned to them')
+        #return
+    else:
+        pass
+    
+    Lims = [[] for _ in range(0,Dims)]
+    SampleBox = [[] for _ in range(0,Dims)]
+    
+    for i in range(Dims):
+        while True:   
+            try:
+                lower = float(input('Value of lower limit for dimention '+str(i+1)+' : '))
+                upper = float(input('Value of upper limit for dimention '+str(i+1)+' : '))
+                print('\n')
+                break
+            except ValueError:
+                print("Value is not a real number, try again")
+        Lims[i].insert(0,lower)
+        Lims[i].insert(1,upper)
+    
+    
+    for i in range(Dims):
+        samples = SFC64.uniform(Lims[i][0],Lims[i][1],NoSamples)
+        SampleBox[i] = samples
+        
+    
+    Ssum = Integrand(SampleBox)
+    SsumSq = Ssum**2
+    
+    ExpectSsum = sum(Ssum) / NoSamples
+    ExpectSsumSq = sum(SsumSq) / NoSamples
+    
+    Var = ((ExpectSsumSq) - (ExpectSsum)**2)
+    
+    Std = (Var)**0.5
+    
+    Coef = np.prod(np.diff(Lims))
+    
+    Total = np.sum(Ssum)
+    
+    Final = (Coef / NoSamples) * Total
+    
+    error = Coef * Std / (NoSamples)**0.5
+    
+    return Lims,SampleBox,Final, error
 
 
 #Lims,SampleBox,Result,Error,Error2,coef,one = Lancia037(1000000,nDcube,2)
