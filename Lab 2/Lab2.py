@@ -2,6 +2,8 @@ import numpy as np
 import scipy as sp
 from inspect import signature
 import quantumrandom as qrand
+from functools import reduce 
+from operator import mul
 
 #Seed = int(t.time())
 Seed = 22061910
@@ -9,6 +11,18 @@ Seed = 22061910
 #vars()['Force_'+str(x)]
 
 SFC64 = np.random.Generator(np.random.SFC64(seed=np.random.SeedSequence(Seed)))
+
+# Depreciated
+# # Groups a list together into N chuncks
+# def ListGrouper(ListIn,ChunckSize):
+#     return [ ListIn[x:x+ChunckSize] for x in range(0, len(ListIn), ChunckSize) ] 
+
+#Reshapes a list
+def reshape(ListIn, shape):
+    if len(shape) == 1:
+        return ListIn
+    n = reduce(mul, shape[1:])
+    return [reshape(ListIn[i*n:(i+1)*n], shape[1:]) for i in range(len(ListIn)//n)]
 
 
 #Will sqaure a list of arrays for all arrays in the list
@@ -25,7 +39,16 @@ def Integrand(DataIn):
     return x + y
 
 def nDcube(DataIn):
+    ReshData = reshape(DataIn,[3,3])
+    
+    
+    
     return DataIn
+
+def NineDIntegrand(DataIn):
+    np.reshape(DataIn,(3,3))
+    
+    return
 
 #Named after the car that won the 1983 Monte-Carlo rally
 
