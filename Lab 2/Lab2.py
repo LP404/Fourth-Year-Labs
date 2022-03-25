@@ -1,151 +1,69 @@
 import numpy as np
-import scipy as sp
-from inspect import signature
-import quantumrandom as qrand
-from functools import reduce 
-from operator import mul
+import IntegralFunctions as IF
 
-#Seed = int(t.time())
-Seed = 22061910
+def TwoA(DataIn):
+    return 2
 
-#vars()['Force_'+str(x)]
+def TwoB(DataIn):
+    x = DataIn[0]
+    return -1 * x
 
-SFC64 = np.random.Generator(np.random.SFC64(seed=np.random.SeedSequence(Seed)))
+def TwoC(DataIn):
+    x = DataIn[0]
+    return x**2
 
-# Depreciated
-# # Groups a list together into N chuncks
-# def ListGrouper(ListIn,ChunckSize):
-#     return [ ListIn[x:x+ChunckSize] for x in range(0, len(ListIn), ChunckSize) ] 
-
-#Reshapes a list
-def reshape(ListIn, shape):
-    if len(shape) == 1:
-        return ListIn
-    n = reduce(mul, shape[1:])
-    return [reshape(ListIn[i*n:(i+1)*n], shape[1:]) for i in range(len(ListIn)//n)]
-
-
-#Will sqaure a list of arrays for all arrays in the list
-def SqList(listIn):
-    listOut = [i**2 for i in listIn]
-    return listOut
-
-#Integrand
-def Integrand(DataIn):
+def TwoD(DataIn):
 
     x = DataIn[0]
     y = DataIn[1]
 
-    return x + y
+    return x*y + y
 
-def nDcube(DataIn):
-    ReshData = reshape(DataIn,[3,3])
-    
-    
-    
+def FiveA(DataIn):
+    x = DataIn[0]
+    return 2*np.exp((-x**2))
+
+def FiveAWeight(DataIn):
+     x = DataIn[0]
+     return np.exp(-abs(x)) 
+
+def FiveB(DataIn):
+    x = DataIn[0]
+    return (1.5 * np.sin(x))
+
+def FiveBWeight(DataIn):
+     x = DataIn[0]
+     return ((4 / np.pi**2) * x * (np.pi - x))   
+
+def nDcube(DataIn):    
     return DataIn
 
-def NineDIntegrand(DataIn):
-    np.reshape(DataIn,(3,3))
-    
-    return
 
-#Named after the car that won the 1983 Monte-Carlo rally
+def nineDIntegral(DataIn):
+    ReshData = IF.reshape(DataIn,[3,3])
+    
+    Add = list(range(len(ReshData)))
+    Output = list(range(len(ReshData)))
+
+    for i in range(len(ReshData)):
+          Add[i] = ReshData[0][i] + ReshData[1][i]  
+    
+    for i in range(len(ReshData)):
+          Output[i] = 1 / abs(sum(Add[i] * ReshData[2][i]))
+              
+    return Output
+
 
 NoSamples = 10000
 NoDims = 3
 
-def Lancia037(NoSamples,Integrand,NoDims):
-    
-    DimsCheck = len(signature(Integrand).parameters)
-    Dims = NoDims
-    
-    if DimsCheck > Dims:
-        print('There are dimentions that have no limits assigned to them')
-        #return
-    else:
-        pass
-    
-    Lims = [[] for _ in range(0,Dims)]
-    SampleBox = [[] for _ in range(0,Dims)]
-    
-    for i in range(Dims):
-        while True:   
-            try:
-                lower = float(input('Value of lower limit for dimention '+str(i+1)+' : '))
-                upper = float(input('Value of upper limit for dimention '+str(i+1)+' : '))
-                print('\n')
-                break
-            except ValueError:
-                print("Value is not a real number, try again")
-        Lims[i].insert(0,lower)
-        Lims[i].insert(1,upper)
+
+def main():
     
     
-    for i in range(Dims):
-        samples = SFC64.uniform(Lims[i][0],Lims[i][1],NoSamples)
-        SampleBox[i] = samples
-        
     
-    Ssum = Integrand(SampleBox)
-    SsumSq = Ssum**2
-    
-    ExpectSsum = sum(Ssum) / NoSamples
-    ExpectSsumSq = sum(SsumSq) / NoSamples
-    
-    Var = ((ExpectSsumSq) - (ExpectSsum)**2)
-    
-    Std = (Var)**0.5
-    
-    Coef = np.prod(np.diff(Lims))
-    
-    Total = np.sum(Ssum)
-    
-    Final = (Coef / NoSamples) * Total
-    
-    error = Coef * Std / (NoSamples)**0.5
-    
-    return Lims,SampleBox,Final, error
+    return
 
 
-#Lims,SampleBox,Result,Error,Error2,coef,one = Lancia037(1000000,nDcube,2)
-
-#This car has won several monte carlo rallies
-def AudiQuattroA2(Samples,Lims):
-    #checks if the limits pretaine to a n ball, by checking if they are all the same length in each axis and occupy the same respective coorsinates in each axis
-    check = True
-    for i in range(1,len(Lims)):
-        if Lims[i] == Lims[i-1]:
-            pass
-        else:
-            check = False
-    
-    if check == False:
-        print('nBall calcualtion is not possible, check limits')
-        return
-    else:
-        pass
-    
-    #we know that the equation for an n ball is dim1**2 + dim2**2 + ... + dimN**2 = radius**2
-    #Factor in center points
-    
-    
-    rsq = (np.diff(Lims)[0][0]/2)**2
-    
-    InSphere = 0
-    
-    for i in range(0,len(Samples[0])):
-        total = 0
-        for j in range(0,len(Lims)):
-            total += ([row[i] for row in Samples][j] - np.mean(Lims[0]))**2
-        
-        
-        if total <= rsq:
-            InSphere += 1
-        else:
-            pass
-    
-    Volume = np.prod(np.diff(Lims)) * (InSphere / len(Samples[0]))
-    
-    
-    return InSphere ,Volume
+if __name__ == '__main__':
+    main()
