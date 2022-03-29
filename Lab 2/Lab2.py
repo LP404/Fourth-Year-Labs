@@ -54,12 +54,29 @@ def nineDIntegral(DataIn):
     return Output
 
 
-NoSamples = 10000
-NoDims = 3
-
 
 def main():
+    NoSamples = 10000
+    delta = 0.1
     
+    Two1 = IF.MCIntegrator(NoSamples,TwoA,1)
+    Two2 = IF.MCIntegrator(NoSamples,TwoB,1)
+    Two3 = IF.MCIntegrator(NoSamples,TwoC,1)
+    Two4 = IF.MCIntegrator(NoSamples,TwoD,2)
+    
+    Three1A = IF.MCIntegrator(NoSamples,nDcube,2)
+    Three1B = IF.nBallVolume(Three1A[0],Three1A[1])
+
+    Three2A = IF.MCIntegrator(NoSamples,nDcube,3)
+    Three2B = IF.nBallVolume(Three2A[0],Three2A[1])
+    
+    Four1 = IF.MCIntegrator(NoSamples,nineDIntegral,9)
+    
+    Five1 = IF.MCISIntegrator(delta,NoSamples,FiveA,FiveAWeight,1)
+    Five2 = IF.MCISIntegrator(delta,NoSamples,FiveB,FiveBWeight,1)
+    
+    Six1 = IF.MCIntegrator(NoSamples,FiveA,1)
+    Six2 = IF.MCIntegrator(NoSamples,FiveB,1)
     
     
     return
