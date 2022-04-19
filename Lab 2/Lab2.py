@@ -32,7 +32,7 @@ def FiveAWeight(DataIn):
     else:
         x = DataIn
     
-    return np.exp(-abs(x)) 
+    return (np.exp(-abs(x))) 
 
 def FiveB(DataIn):
     x = DataIn[0]
@@ -69,11 +69,10 @@ def nineDIntegral(DataIn):
 
 def main():
     # #Creates a pesudo log spaced NoSamples
-    Order = np.logspace(1, 6, 6)
+    Order = np.logspace(1, 7, 7)
     #BaseNo = np.array([1,2.5,5,7.5])
     BaseNo = np.arange(1,10,1)
     NoSamples = np.outer(Order,BaseNo).flatten()
-    # NoSamples = np.array([100,1000,10000,100000,1000000])
     
     #Converts all the values in NoSamples to integers if they are not already
     NoSamples = NoSamples.astype(int)

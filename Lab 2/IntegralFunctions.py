@@ -102,7 +102,7 @@ def nBallVolume(Samples,Lims,Dims,NoSamples):
         #Will append to each txt for each axis for each sphere
         for l in range(0,len(DimCounter)):
             #Checks for if it the last append, if so  will not add a semicolon at the end. Semicolon is needed as a delimiter
-            if i == (len(Samples[0]) - 1):        
+            if i == (len(Samples[l]) - 1):        
                 #Checks if the point is in the nBall or not
                 #If so, updates the count by 1 if not discards point
                 if total <= rsq:
@@ -242,7 +242,7 @@ def MCISIntegrator(delta,initGuess,n,Integrand,WeightFunc,Dims,Lims,DoingNBall):
             error = Coef * Std / len(SampleBox[0])**0.5
             
         
-    return Lims,SampleBox,Final, error
+    return Lims,SampleBox,Final,error
 
 
 #A small function that will run if you directly run this script (not imported into another script), purely asthetic
