@@ -65,6 +65,23 @@ def nineDIntegral(DataIn):
 
     return 1 / DotPro
 
+def trapezoids(func, xmin, xmax, nmax):
+    Isim = func(xmin)+func(xmax)
+    h = (xmax-xmin)/nmax
+    for i in range(1,nmax):
+        x = xmin+i*h
+        Isim += 2*func(x)
+
+    Isim *= h/2
+    return Isim
+
+dummy1 = np.zeros(9)
+dummy2 = np.zeros(9)
+for i in range(len(dummy1)):
+    dummy1[i] = np.zeros(1)
+    dummy2[i] = np.ones(1)
+
+nmax = 100000
 
 
 def main():
